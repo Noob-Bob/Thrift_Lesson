@@ -2,10 +2,13 @@
 // You should copy it to another filename to avoid overwriting it.
 
 #include "match_server/Match.h"
+#include "save_client/Save.h"
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <thrift/transport/TTransportUtils.h>
+#include <thrift/transport/TSocket.h>
 
 #include <iostream>
 #include <thread>
@@ -20,7 +23,8 @@ using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 
-using namespace  ::match_service;
+using namespace ::match_service;
+using namespace ::save_service;
 using namespace std;
 
 struct Task
@@ -42,6 +46,21 @@ class Pool
         void save_result(int a, int b)
         {
             printf("Match Result: %d %d\n", a, b);
+
+            std::shared_ptr<TTransport> socket(new TSocket("123.57.47.211", 9090));
+            std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+            std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+            SaveClient client(protocol);
+
+            try {
+                transport->open();
+
+                client.save_data("acs_3471", "f7be8963", a, b);
+
+                transport->close();
+            } catch (TException& tx) {
+                cout << "ERROR: " << tx.what() << endl;
+            }
         }
 
         void match()
@@ -83,7 +102,7 @@ class MatchHandler : virtual public MatchIf {
         int32_t add_user(const User& user, const std::string& info) {
             // Your implementation goes here
             printf("add_user\n");
-            
+
             unique_lock<mutex> lck(message_queue.m);
             message_queue.q.push({user, "add"});
             message_queue.cv.notify_all();
