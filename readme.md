@@ -49,5 +49,23 @@ The structure of this simple project is shown below
    ./main
    ```
 
+7. Create match-client
+
+   ```
+   cd thrift_lesson/game/src
+   thrift -r --gen py ../../thrift/save.thrift
+   mv gen-py/ match_client
+   ```
+
+8. Create client.py
+
+   The source code is [here](https://github.com/Noob-Bob/Thrift_Lesson/blob/master/game/src/client.py)
+
+9. Implement client
+
+   ```
+   python3 client.py
+   ```
+
    
 
