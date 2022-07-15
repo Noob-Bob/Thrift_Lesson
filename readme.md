@@ -6,4 +6,4 @@ Thrift is a kind of RPC(Remote Procedure Call) framework.
 
 The structure of this simple project is shown below
 
-![structure](D:\GitHub\Thrift_Lesson\Repo_image\structure.jpg)
+![structure](https://github.com/Noob-Bob/Thrift_Lesson/blob/master/Repo_image/structure.jpg?raw=true)
