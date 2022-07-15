@@ -60,7 +60,10 @@ class Pool
             try {
                 transport->open();
 
-                client.save_data("acs_3471", "f7be8963", a, b);
+                int res = client.save_data("acs_3471", "f7be8963", a, b);
+
+                if(!res) puts("success");
+                else puts("failure");
 
                 transport->close();
             } catch (TException& tx) {
